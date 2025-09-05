@@ -1,0 +1,90 @@
+#SetEnvIf Request_URI "^([^.]*?)(\?.*)?\.php$" PRELOAD_IMAGE
+#Header add Link "<https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700&display=swap>; rel=preload; as=style,<https://portal.ebizindia.com/css/bootstrap.min.css>;rel=preload;as=style,</js/jquery-3.3.1.min.js>,rel=preload;as=script" env=PRELOAD_IMAGE
+<IfModule mod_headers.c>
+#Header set Set-Cookie HttpOnly;Secure
+Header always set X-XSS-Protection "1; mode=block"
+Header always set X-Content-Type-Options "nosniff"
+Header always set Strict-Transport-Security "max-age=31536000"
+Header always set x-frame-options: "SAMEORIGIN"
+Header always set Referrer-Policy: "same-origin"
+</IfModule>
+
+ErrorDocument 404 404.php
+
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^ssaraansh.com [NC]
+RewriteRule ^(.*)$ http://www.ssaraansh.com/$1 [L,R=301]
+RewriteRule ^event\/(\d+)$ /event-registrations.php#mode=book&e=$1 [NE,R=301,L]
+
+# Remove this part to avoid enforcing www
+# RewriteCond %{HTTP_HOST} !^www\. [NC]
+# RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L] 
+
+#RewriteCond %{SERVER_PORT} 80
+#RewriteCond %{REQUEST_URI} !well-known
+#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule (.*?)\.\d+\.(js|css|gif|jpg|jpeg|png)$ $1.$2 [NC,L]
+
+#RewriteRule ^user-uploaded-files\/.*$ - [NC,F,L]
+RewriteRule ^includes\/ - [NC,F,L]
+
+<IfModule mod_xsendfile.c>
+    XSendFile on
+    #XSendFilePath /var/www/html/chportal/user-uploaded-files
+</IfModule>
+
+AddOutputFilterByType DEFLATE text/htm text/html text/plain text/xml application/javascript text/javascript text/css application/x-javascript text/json
+
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType image/jpg "access 1 year"
+ExpiresByType image/jpeg "access 1 year"
+ExpiresByType image/gif "access 1 year"
+ExpiresByType image/png "access 1 year"
+ExpiresByType text/css "access 1 year"
+ExpiresByType text/html "access 1 second"
+ExpiresByType text/x-javascript "access 1 year"
+ExpiresByType application/x-javascript "access 1 year"
+ExpiresByType image/x-icon "access 1 year"
+ExpiresDefault "access 1 month"
+</IfModule>
+
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php8_module>
+   php_flag display_errors Off
+   php_value max_execution_time 30
+   php_value max_input_time 60
+   php_value max_input_vars 1000
+   php_value memory_limit 128M
+   php_value post_max_size 40M
+   php_value session.gc_maxlifetime 1440
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php84"
+   php_value upload_max_filesize 10M
+   php_flag zlib.output_compression Off
+</IfModule>
+<IfModule lsapi_module>
+   php_flag display_errors Off
+   php_value max_execution_time 30
+   php_value max_input_time 60
+   php_value max_input_vars 1000
+   php_value memory_limit 128M
+   php_value post_max_size 40M
+   php_value session.gc_maxlifetime 1440
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php84"
+   php_value upload_max_filesize 10M
+   php_flag zlib.output_compression Off
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php84” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php84 .php .php8 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit

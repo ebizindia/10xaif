@@ -1,0 +1,37 @@
+@media all{
+
+	.print_window, #section_comparison_view{
+		display:none !important;
+	}
+
+}
+
+
+@media print{
+	body{font-family:Arial, sans-serif; font-size:11px; margin:0; padding:0; line-height:normal;}
+
+	button, #navbar, #sidebar-wrapper, .list-body,.panel,.pagination-row, table tr .action, table th .fa-sort, .tooltip{
+		display:none !important;
+	}
+
+	.print_window{
+		display:block !important;
+	}
+	#wrapper{padding-left: 0;}
+	.panel-body{padding: 0;}
+	
+	/*#pagefooter{
+		display: table-footer-group;
+	}*/
+	div.pageno:after{
+		counter-increment: page;
+		content: counter(page);
+	}
+	
+	body.print-comparison .print_window{
+		display:none !important;
+	}
+	body.print-comparison #section_comparison_view{
+		display:block !important;
+	}
+}
